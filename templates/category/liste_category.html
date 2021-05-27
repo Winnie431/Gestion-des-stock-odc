@@ -1,0 +1,217 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Categorie
+{% endblock %}
+
+{% block bodyTitle %}
+Category
+{% endblock %}
+
+{% block content %}
+
+<!-- End Navbar -->
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-primary">
+            <h4 class="card-title ">Liste des catégories</h4>
+            <!-- <p class="card-category"> Here is a subtitle for this table</p> -->
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <button type="button"   style ="float: right; "class="btn btn-primary" data-toggle="modal" data-target="#addModal">
+                <i class="material-icons">add </i> Ajouter
+              </button>
+              <table class="table" id="myDataTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Details</th>
+                    <th>Mise a jour</th>
+                    <th>Supprimer</th>
+                  </tr>
+                </thead>
+                {% for items in category %}
+                <tbody>
+                  <tr>
+                    <td>{{items.id}}</td>
+                    <td>{{items.nom}}</td>
+                    <td><a href="#">
+                        <button type="button" class="btn btn-success" onclick="showDatacategory(this)" data-url="{% url 'category_json' items.id %}" data-toggle="modal" data-target="#showModal">
+                          <i class="material-icons">visibility </i>
+                        </button>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="#">
+                        <button class="btn btn-primary" onclick="showDataEdit(this)" data-edit="{% url 'edit_category' items.id %}" data-toggle="modal" data-url="{% url 'category_json' items.id %}" data-toggle="modal" data-target="#editModal">
+                          <i class="material-icons">edit </i>
+                        </button>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="#">
+                        <button class="btn btn-danger" data-model="{}" data-toggle="modal" data-target="#deleteModal">
+                          <i class="material-icons">delete </i>
+                        </button>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+                {% endfor%}
+              </table>
+
+              <!-- addModal -->
+              <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <form action=" {% url 'category_list' %}" method="POST">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="addModalLabel">Ajouter une categorie</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+
+                        {% csrf_token %}
+                        {{form.as_p}}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- showModal -->
+              <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <form action=" " method="POST">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="addModalLabel">Ajouter un produit</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <table class="table  m-6 table-hover">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Nom</th>
+                              
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            <tr></tr>
+                              <td id="details_id"></td>
+                              <td id="details_nom"></td>
+                              
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- editModal -->
+              <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <form action="" method="POST">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="addModalLabel">Modifier une category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        {% csrf_token %}
+                        {{form.as_p}}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- deleteModal -->
+              <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <form action=" " method="POST">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="addModalLabel">title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+
+                        {% csrf_token %}
+                        {{form.as_p}}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+
+
+
+              <!-- modals to add -->
+              <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <form action=" " method="POST">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Ajouter un produit</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+
+                        {% csrf_token %}
+                        {{form.as_p}}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
